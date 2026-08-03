@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qualificação de Mestrado — André Luís de Oliveira | UPM</title>
+<style>
+  :root{--red:#E02525;--ink:#17181c;--muted:#5c6270;--bg:#f6f7fa;--line:#e3e6ee}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+  /* ===== Barra superior ===== */
+  #topbar{position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;gap:12px;
+          padding:0 18px;background:#fff;border-bottom:3px solid var(--red);z-index:20}
+  #topbar .nome{font-weight:700;font-size:15px}
+  #topbar .prog{margin-left:auto;color:var(--muted);font-size:13px}
+  .mini{width:34px;height:34px;flex:0 0 auto}
+  /* ===== Rodapé / controles ===== */
+  #footer{position:fixed;bottom:0;left:0;right:0;height:48px;display:flex;align-items:center;gap:14px;
+          padding:0 16px;background:#fff;border-top:1px solid var(--line);z-index:20;
+          font-size:13px;color:var(--muted)}
+  #footer button{width:34px;height:34px;border:1px solid var(--line);background:#fff;border-radius:8px;
+                 cursor:pointer;font-size:14px;color:var(--ink)}
+  #footer button:hover{border-color:var(--red);color:var(--red)}
+  #ctr{margin-left:auto;font-variant-numeric:tabular-nums}
+  .hint{font-size:12px}
+  /* ===== Slides ===== */
+  .slide{position:fixed;inset:56px 0 48px;padding:26px 52px;overflow:auto;display:none}
+  .slide.active{display:block}
+  .kicker{color:var(--red);font-weight:700;letter-spacing:.07em;text-transform:uppercase;font-size:12.5px;margin:0 0 4px}
+  h1{font-size:clamp(22px,3.2vw,34px);line-height:1.25;margin:.2em 0}
+  h2{font-size:clamp(20px,2.6vw,28px);margin:.1em 0 .4em}
+  .time{display:inline-block;background:#fdecec;border:1px solid #f3c6c6;color:var(--red);
+        border-radius:999px;padding:3px 12px;font-size:12px;font-weight:600;margin-bottom:10px}
+  ul.bullets{margin:0;padding-left:22px;display:grid;gap:9px;font-size:15.5px;line-height:1.45}
+  .callout{border-left:5px solid var(--red);background:#fff;border-radius:10px;padding:12px 16px;
+           font-size:15px;line-height:1.5;box-shadow:0 1px 2px rgba(0,0,0,.05);margin-top:14px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+        box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .card h3{margin:0 0 6px;font-size:15px}
+  .card p{margin:0;font-size:13.5px;line-height:1.5;color:#3a3f4a}
+  .cols{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start}
+  @media(max-width:900px){.cols{grid-template-columns:1fr}}
+  /* barras de porcentagem */
+  .bars{display:grid;gap:9px;margin-top:6px}
+  .bar{display:grid;grid-template-columns:180px 1fr 56px;align-items:center;gap:10px;font-size:13px}
+  .bar .track{height:12px;background:#e8eaf0;border-radius:999px;overflow:hidden}
+  .bar .fill{height:100%;background:var(--red);border-radius:999px}
+  .bar b{text-align:right}
+  /* tabela */
+  table{border-collapse:collapse;width:100%;font-size:13px;background:#fff}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--red);color:#fff}
+  /* ADDIE */
+  .addie{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .addie .st{flex:1;min-width:96px;background:#fff;border:1px solid var(--line);border-top:4px solid var(--red);
+             border-radius:10px;padding:8px 6px;text-align:center}
+  .addie .st b{display:block;font-size:13px}
+  .addie .st span{font-size:11.5px;color:var(--muted)}
+  /* etapas num. */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;counter-reset:st}
+  .steps .card{counter-increment:st;position:relative;padding-top:34px}
+  .steps .card::before{content:counter(st);position:absolute;top:-12px;left:14px;width:28px;height:28px;
+        background:var(--red);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;
+        font-weight:700;font-size:14px}
+  /* cronograma */
+  .tl{display:grid;gap:7px;font-size:14.5px}
+  .tl div{display:flex;gap:10px;align-items:baseline;background:#fff;border:1px solid var(--line);
+          border-radius:10px;padding:7px 12px}
+  .tl .when{min-width:110px;font-weight:700}
+  .ok{color:#1a7f37;font-weight:600}.now{color:var(--red);font-weight:600}.plan{color:var(--muted)}
+  /* referências */
+  .refs{font-size:12.5px;line-height:1.55;display:grid;gap:7px;padding-left:20px;margin:0}
+  /* capa */
+  .capa-inner{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+              text-align:center;gap:14px}
+  .grande{width:190px;height:190px}
+  .capa-meta{display:flex;gap:34px;flex-wrap:wrap;justify-content:center;font-size:14.5px;color:#333}
+  .capa-meta strong{color:var(--red);display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  .roteiro{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .roteiro li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:15px}
+  @media(max-width:900px){.roteiro{grid-template-columns:1fr}}
+  .mods{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:900px){.mods{grid-template-columns:1fr}}
+  .tools{margin-top:14px;text-align:center;font-size:14.5px}
+  .tools b{color:var(--red)}
+  .final{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+         text-align:center;gap:14px}
+</style>
+</head>
+<body>
+
+<!-- ============ NOVO EMBLEMA (igual à imagem: anel vermelho + M serifado) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="emblema" viewBox="0 0 500 500">
+    <circle cx="250" cy="250" r="222" fill="#ffffff"/>
+    <circle cx="250" cy="250" r="222" fill="none" stroke="#E02525" stroke-width="46"/>
+    <path fill="#E02525" d="M135,150 L229,150 L250,300 L271,150 L365,150 L365,172
+      Q347,172 347,190 L347,310 Q347,328 365,328 L365,350 L291,350 L291,328
+      Q303,328 303,310 L303,180 Q303,172 298,172 L257,348 L243,348 L202,172
+      Q197,172 197,180 L197,310 Q197,328 209,328 L209,350 L135,350 L135,328
+      Q153,328 153,310 L153,190 Q153,172 135,172 Z"/>
+  </symbol>
+</svg>
+
+<header id="topbar">
+  <svg class="mini" viewBox="0 0 500 500"><use href="#emblema"/></svg>
+  <span class="nome">Universidade Presbiteriana Mackenzie</span>
+  <span class="prog">PPG Computação Aplicada</span>
+</header>
+
+<!-- ================= SLIDE 1 · CAPA ================= -->
+<section class="slide" data-label="Capa">
+  <div class="capa-inner">
+    <svg class="grande" viewBox="0 0 500 500"><use href="#emblema"/></svg>
+    <p class="kicker">Qualificação de Mestrado · 2026</p>
+    <h1>Pensamento Computacional no Ensino Fundamental: Desenvolvimento de Curso de Formação Continuada em Robótica para Professores</h1>
+    <div class="capa-meta">
+      <div><strong>Mestrando</strong>André Luís de Oliveira</div>
+      <div><strong>Orientadora</strong>Prof.ª Dr.ª Maria Amélia Eliseo</div>
+      <div><strong>Programa</strong>Pós-Graduação em Computação Aplicada — São Paulo</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 2 · ROTEIRO ================= -->
+<section class="slide" data-label="Apresentação">
+  <p class="kicker">Apresentação</p>
+  <h2>Roteiro da Apresentação</h2>
+  <span class="time">⏱ 30s</span>
+  <ul class="roteiro">
+    <li>🏛️ <b>1 · Contextualização</b></li>
+    <li>🎯 <b>2 · Justificativa</b></li>
+    <li>💡 <b>3 · Introdução / Relevância</b></li>
+    <li>🧭 <b>4 · Objetivos</b></li>
+    <li>📚 <b>5 · Referencial Teórico</b></li>
+    <li>🔎 <b>6 · Trabalhos Correlatos</b></li>
+    <li>🧪 <b>7 · Metodologia</b></li>
+    <li>📊 <b>8 · Resultados Parciais</b></li>
+    <li>🗓️ <b>9 · Cronograma e Próximos Passos</b></li>
+  </ul>
+</section>
+
+<!-- ================= SLIDE 3 ================= -->
+<section class="slide" data-label="01 · Contextualização">
+  <p class="kicker">01 · Contextualização</p>
+  <h2>Robótica Educacional e Educação Digital no currículo</h2>
+  <span class="time">⏱ 1min30</span>
+  <ul class="bullets">
+    <li><b>BNCC (2017):</b> a cultura digital é competência geral da educação.</li>
+    <li><b>Resolução CNE/CEB nº 02/2025:</b> torna obrigatório o Pensamento Computacional e a Educação Digital nas escolas a partir de 2026.</li>
+    <li><b>Robótica educacional:</b> recurso pedagógico para aprendizagem ativa, resolução de problemas e STEAM.</li>
+    <li><b>Problema:</b> a maioria dos professores não possui formação específica em robótica ou programação.</li>
+  </ul>
+  <div class="callout"><b>“Exigência curricular crescente × lacuna na formação docente”</b> → tensão central desta pesquisa</div>
+</section>
+
+<!-- ================= SLIDE 4 ================= -->
+<section class="slide" data-label="01 · Contextualização">
+  <p class="kicker">01 · Contextualização</p>
+  <h2>O desafio da formação docente</h2>
+  <span class="time">⏱ 1min</span>
+  <div class="cards">
+    <div class="card"><h3>🧗 Atuação empírica</h3><p>Professores adaptam saberes de outras áreas; insegurança e robótica vista como recurso complexo ou restrito às áreas técnicas (Carneiro &amp; Souza, 2023; Silva et al., 2024).</p></div>
+    <div class="card"><h3>🧩 Políticas fragmentadas</h3><p>Formação continuada com frágil articulação entre teoria pedagógica e prática tecnológica (Olivera; Garcia; Gonçalves, 2019).</p></div>
+    <div class="card"><h3>🔬 Lacuna de estudos</h3><p>Poucos estudos empíricos sobre capacitação de professores em robótica; propostas privilegiam kits proprietários de alto custo (Freitas Neto &amp; Bertagnolli, 2021).</p></div>
+    <div class="card"><h3>💬 Voz do professor</h3><p>“Desconhecimento das tecnologias”, “falta de tempo para planejamento” (Moraes &amp; Brandt, 2023).</p></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 5 ================= -->
+<section class="slide" data-label="02 · Justificativa">
+  <p class="kicker">02 · Justificativa</p>
+  <h2>Por que esta pesquisa importa?</h2>
+  <span class="time">⏱ 1min30</span>
+  <div class="cards">
+    <div class="card"><h3>🌍 Relevância social e pedagógica</h3><p>Reduzir a distância entre as exigências da BNCC/Resolução 02/2025 e as condições reais de formação dos professores.</p></div>
+    <div class="card"><h3>🕳️ Lacuna na literatura</h3><p>Poucos estudos articulam diagnóstico + desenvolvimento de proposta + avaliação de efetividade em contextos reais.</p></div>
+    <div class="card"><h3>⏳ Demanda emergente</h3><p>Obrigatoriedade do Pensamento Computacional a partir de 2026 exige programas formativos em escala.</p></div>
+    <div class="card"><h3>🔒 Acesso restrito hoje</h3><p>USP/FREP: 80 vagas · IFMG: 200 vagas · UFSM: seleção · Sesi: mensalidades → necessidade de formação gratuita, flexível e com simuladores.</p></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 6 ================= -->
+<section class="slide" data-label="03 · Introdução">
+  <p class="kicker">03 · Introdução</p>
+  <h2>Relevância e Pergunta de Pesquisa</h2>
+  <span class="time">⏱ 1min</span>
+  <ul class="bullets">
+    <li>A consolidação da robótica educacional depende de processos formativos que integrem tecnologia e pedagogia de forma crítica e contextualizada.</li>
+    <li>Metodologias ativas + ambientes digitais ampliam autonomia e confiança docente (Panceri et al., 2021; Brum et al., 2024).</li>
+  </ul>
+  <div class="callout">❓ <b>Pergunta de pesquisa:</b> Em que medida um curso online de formação continuada em robótica educacional, estruturado com base no diagnóstico das necessidades docentes, no Design Instrucional e em metodologias ativas, impacta o desenvolvimento de competências pedagógicas e tecnológicas e a confiança dos professores para integrar a robótica educacional ao Ensino Fundamental?<br><small>Em consonância com a BNCC e a Resolução CNE/CEB nº 02/2025</small></div>
+</section>
+
+<!-- ================= SLIDE 7 ================= -->
+<section class="slide" data-label="04 · Objetivos">
+  <p class="kicker">04 · Objetivos</p>
+  <h2>Objetivo Geral e Específicos</h2>
+  <span class="time">⏱ 1min30</span>
+  <div class="callout" style="margin-top:0">🎯 <b>Objetivo Geral</b><br>Investigar o perfil profissional e as necessidades formativas de professores da Educação Básica que atuam com robótica educacional no Ensino Fundamental, para o desenvolvimento de uma formação continuada baseada em princípios do Design Instrucional e da aprendizagem ativa.</div>
+  <div class="cards" style="margin-top:14px">
+    <div class="card"><h3>1️⃣ Identificar</h3><p>necessidades formativas (conhecimentos técnicos, pedagógicos e experiência prévia).</p></div>
+    <div class="card"><h3>2️⃣ Analisar</h3><p>metodologias e recursos didáticos para a formação continuada em robótica.</p></div>
+    <div class="card"><h3>3️⃣ Desenvolver</h3><p>curso online que articule conteúdos técnicos, habilidades pedagógicas e reflexão crítica.</p></div>
+    <div class="card"><h3>4️⃣ Avaliar</h3><p>pertinência pedagógica, coerência didática e adequação dos conteúdos com Design Instrucional.</p></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 8 ================= -->
+<section class="slide" data-label="05 · Referencial Teórico">
+  <p class="kicker">05 · Referencial Teórico</p>
+  <h2>Quatro eixos teóricos</h2>
+  <span class="time">⏱ 30s</span>
+  <div class="cards">
+    <div class="card"><h3>🤖 2.1 Robótica Educacional e Pensamento Computacional</h3></div>
+    <div class="card"><h3>⚡ 2.2 Metodologias Ativas e Aprendizagem Criativa</h3></div>
+    <div class="card"><h3>📐 2.3 Design Instrucional para Cursos Online</h3></div>
+    <div class="card"><h3>🌐 2.4 Formato Online na Formação Continuada</h3></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 9 ================= -->
+<section class="slide" data-label="05 · Referencial Teórico">
+  <p class="kicker">05 · Referencial Teórico</p>
+  <h2>Robótica Educacional e Pensamento Computacional</h2>
+  <span class="time">⏱ 1min30</span>
+  <div class="cols">
+    <ul class="bullets">
+      <li>Robótica educacional: dispositivos programáveis, sensores e ambientes computacionais em atividades pedagógicas interdisciplinares (STEAM).</li>
+      <li>PC (Brackmann, 2017): formular problemas e desenvolver soluções lógicas e estruturadas.</li>
+      <li>Evidências: melhora do raciocínio lógico, criatividade, autonomia e interesse por STEM (Monteiro Júnior et al., 2025; Ching et al., 2019).</li>
+      <li>Desafio: implementação heterogênea, condicionada à infraestrutura e à formação docente (Nóbrega, 2022).</li>
+    </ul>
+    <div class="card"><h3>Pilares do Pensamento Computacional</h3>
+      <p>Decomposição<br>Reconhecimento de padrões<br>Abstração<br>Algoritmos</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 10 ================= -->
+<section class="slide" data-label="05 · Referencial Teórico">
+  <p class="kicker">05 · Referencial Teórico</p>
+  <h2>Metodologias Ativas e Aprendizagem Criativa</h2>
+  <span class="time">⏱ 1min30</span>
+  <div class="cards">
+    <div class="card"><h3>🧠 Metodologias Ativas</h3><p>Protagonismo do estudante, resolução de problemas (Berbel, 2011; Dewey; Freire). PBL e Sala de Aula Invertida (Bergmann &amp; Sams, 2016; Bacich &amp; Moran, 2018).</p></div>
+    <div class="card"><h3>🎨 Aprendizagem Criativa (Resnick)</h3><p>Os 4 Ps: Projects (projetos), Passion (paixão), Peers (pares) e Play (brincar) — convergência total com robótica e cultura Maker.</p></div>
+    <div class="card"><h3>Na formação docente</h3><p>Atividades práticas + problemas reais → aumentam confiança e autonomia do professor para integrar tecnologias ao currículo (Jurado et al., 2020; Brum et al., 2024).</p></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 11 ================= -->
+<section class="slide" data-label="05 · Referencial Teórico">
+  <p class="kicker">05 · Referencial Teórico</p>
+  <h2>Design Instrucional — Modelo ADDIE</h2>
+  <span class="time">⏱ 1min30</span>
+  <div class="addie">
+    <div class="st"><b>Análise</b><span>diagnóstico</span></div>
+    <div class="st"><b>Design</b><span>planejamento</span></div>
+    <div class="st"><b>Desenv.</b><span>materiais</span></div>
+    <div class="st"><b>Implem.</b><span>oferta</span></div>
+    <div class="st"><b>Avaliação</b><span>contínua</span></div>
+  </div>
+  <ul class="bullets">
+    <li><b>Análise:</b> baixo conhecimento técnico, carência de formação, limitação de kits.</li>
+    <li><b>Design:</b> estrutura modular, metodologias ativas, simuladores gratuitos.</li>
+    <li><b>Desenvolvimento:</b> videoaulas, PDFs, tutoriais, fóruns, AVA.</li>
+    <li><b>Implementação:</b> oferta assíncrona com mediação e engajamento.</li>
+    <li><b>Avaliação:</b> multidimensional — reação, aprendizagem, comportamento, resultados (Kopcha et al., 2017). ADDIEM como apoio (Battestin &amp; Santos, 2022).</li>
+  </ul>
+</section>
+
+<!-- ================= SLIDE 12 ================= -->
+<section class="slide" data-label="05 · Referencial Teórico">
+  <p class="kicker">05 · Referencial Teórico</p>
+  <h2>Formato online: estratégia necessária</h2>
+  <span class="time">⏱ 1min</span>
+  <ul class="bullets">
+    <li>Flexibilidade temporal e espacial para o docente (Moran, 2015).</li>
+    <li>Simuladores virtuais superam o custo dos kits físicos (Nascimento, 2024).</li>
+    <li>Perfil compatível: 85,2% acessam a internet diariamente; 88,9% a usam para capacitação.</li>
+    <li>Curso gratuito, assíncrono e baseado em simuladores → democratização do acesso.</li>
+  </ul>
+</section>
+
+<!-- ================= SLIDE 13 ================= -->
+<section class="slide" data-label="06 · Trabalhos Correlatos">
+  <p class="kicker">06 · Trabalhos Correlatos</p>
+  <h2>Estado da arte e diferencial da pesquisa</h2>
+  <span class="time">⏱ 1min30</span>
+  <table>
+    <tr><th>Autor / Ano</th><th>Contribuição para esta pesquisa</th></tr>
+    <tr><td>Nascimento (2024)</td><td>Viabilidade de simuladores virtuais (Tinkercad) em contextos com infraestrutura limitada.</td></tr>
+    <tr><td>Brum et al. (2024)</td><td>Modalidade online/MOOC viável em larga escala; desenvolve competências pedagógicas e tecnológicas.</td></tr>
+    <tr><td>Wunsch (2021)</td><td>Capacitação deve transformar estratégias pedagógicas, não apenas técnica.</td></tr>
+    <tr><td>Custodio (2023)</td><td>Planejamento instrucional sistemático para cursos online (Design Instrucional).</td></tr>
+    <tr><td>Moraes; Brandt (2023)</td><td>Problema persiste mesmo com boa infraestrutura: falta formação pedagógica continuada.</td></tr>
+    <tr><td>Battestin; Santos (2022)</td><td>Modelo ADDIEM para criação de MOOCs; processo estruturado de desenvolvimento.</td></tr>
+  </table>
+  <div class="callout"><b>Diferencial:</b> articula simultaneamente (a) diagnóstico das necessidades, (b) curso com Design Instrucional e (c) validação prática com professores do Ensino Fundamental.</div>
+</section>
+
+<!-- ================= SLIDE 14 ================= -->
+<section class="slide" data-label="07 · Metodologia">
+  <p class="kicker">07 · Metodologia</p>
+  <h2>Pesquisa aplicada · quali-quantitativa · 4 etapas</h2>
+  <span class="time">⏱ 1min</span>
+  <div class="steps">
+    <div class="card"><h3>Revisão teórica e requisitos</h3><p>Fundamentos conceituais, pedagógicos e tecnológicos; requisitos formativos.</p></div>
+    <div class="card"><h3>Diagnóstico do perfil docente</h3><p>Questionário digital (Google Forms) com 27 professores — SP. TCLE aprovado (CEP/UPM, CAAE 96321326.8.0000.0084).</p></div>
+    <div class="card"><h3>Desenvolvimento do curso</h3><p>Modelo ADDIE; curso online assíncrono, 6 módulos / 16h; validação por especialistas.</p></div>
+    <div class="card"><h3>Implementação e avaliação</h3><p>Oferta aos professores + questionário pós-curso (relevância, clareza, aplicabilidade, usabilidade).</p></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 15 ================= -->
+<section class="slide" data-label="07 · Metodologia">
+  <p class="kicker">07 · Metodologia</p>
+  <h2>Participantes, instrumentos e ética</h2>
+  <span class="time">⏱ 1min</span>
+  <div class="cards">
+    <div class="card"><h3>👥 Participantes</h3><p>Professores da Educação Básica — SP, por conveniência; inclusão: em exercício, ≥18 anos, TCLE aceito.</p></div>
+    <div class="card"><h3>📋 Instrumentos</h3><p>Questionário diagnóstico (Apêndice B) e avaliativo (Apêndice D), adaptados de Freitas Neto (2023), Custódio (2023), Silva et al. (2024), Santos (2025).</p></div>
+    <div class="card"><h3>🛠️ Ferramentas</h3><p>AVA (LMS), simuladores Tinkercad, Scratch e MakeCode; videoaulas curtas, PDFs, fóruns e quizzes.</p></div>
+    <div class="card"><h3>🛡️ Ética</h3><p>Aprovado pelo CEP/UPM em 23/04/2025 — CAAE nº 96321326.8.0000.0084; anonimato e participação voluntária (Res. CNS 466/2012 e 510/2016).</p></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 16 ================= -->
+<section class="slide" data-label="08 · Resultados Parciais">
+  <p class="kicker">08 · Resultados Parciais</p>
+  <h2>Diagnóstico — perfil dos participantes (n = 27)</h2>
+  <span class="time">⏱ 1min30</span>
+  <div class="bars">
+    <div class="bar"><span>41–50 anos</span><div class="track"><div class="fill" style="width:44.4%"></div></div><b>44,4%</b></div>
+    <div class="bar"><span>31–40 anos</span><div class="track"><div class="fill" style="width:40.7%"></div></div><b>40,7%</b></div>
+    <div class="bar"><span>5–10 anos de docência</span><div class="track"><div class="fill" style="width:37%"></div></div><b>37,0%</b></div>
+    <div class="bar"><span>Fundamental I</span><div class="track"><div class="fill" style="width:59.3%"></div></div><b>59,3%</b></div>
+    <div class="bar"><span>Rede particular</span><div class="track"><div class="fill" style="width:48.1%"></div></div><b>48,1%</b></div>
+    <div class="bar"><span>Rede pública</span><div class="track"><div class="fill" style="width:44.4%"></div></div><b>44,4%</b></div>
+    <div class="bar"><span>Form. em Tecnologia</span><div class="track"><div class="fill" style="width:25.9%"></div></div><b>25,9%</b></div>
+    <div class="bar"><span>Internet diária</span><div class="track"><div class="fill" style="width:85.2%"></div></div><b>85,2%</b></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 17 ================= -->
+<section class="slide" data-label="08 · Resultados Parciais">
+  <p class="kicker">08 · Resultados Parciais</p>
+  <h2>Conhecimentos em robótica e experiência prévia</h2>
+  <span class="time">⏱ 1min30</span>
+  <ul class="bullets">
+    <li><b>51,9%</b> já ministram aulas de robótica no Ensino Fundamental (48,1% ainda não atuam).</li>
+  </ul>
+  <div class="bars">
+    <div class="bar"><span>Conhecimento médio</span><div class="track"><div class="fill" style="width:51.9%"></div></div><b>51,9%</b></div>
+    <div class="bar"><span>Conhecimento baixo</span><div class="track"><div class="fill" style="width:22.2%"></div></div><b>22,2%</b></div>
+    <div class="bar"><span>Muito baixo</span><div class="track"><div class="fill" style="width:14.8%"></div></div><b>14,8%</b></div>
+    <div class="bar"><span>Nunca fez formação (3 anos)</span><div class="track"><div class="fill" style="width:51.9%"></div></div><b>51,9%</b></div>
+  </div>
+  <div class="callout"><b>85,1%</b> dos docentes avaliam seu conhecimento em robótica como <b>médio ou baixo</b> — mesmo entre os que já atuam com a disciplina. → As formações existentes <b>não têm sido suficientes</b> para gerar segurança técnica e pedagógica.<br><small><b>Resultado central do diagnóstico</b></small></div>
+</section>
+
+<!-- ================= SLIDE 18 ================= -->
+<section class="slide" data-label="08 · Resultados Parciais">
+  <p class="kicker">08 · Resultados Parciais</p>
+  <h2>Recursos conhecidos × utilizados e atualização</h2>
+  <span class="time">⏱ 1min</span>
+  <div class="cols">
+    <div class="card"><h3> Conhece / Utiliza</h3>
+      <div class="bars">
+        <div class="bar"><span>Kits físicos</span><div class="track"><div class="fill" style="width:81.5%"></div></div><b>81,5%</b></div>
+        <div class="bar"><span>Blocos (Scratch)</span><div class="track"><div class="fill" style="width:70.4%"></div></div><b>70,4%</b></div>
+        <div class="bar"><span>Simuladores</span><div class="track"><div class="fill" style="width:66.7%"></div></div><b>66,7%</b></div>
+        <div class="bar"><span>Uso frequente</span><div class="track"><div class="fill" style="width:63%"></div></div><b>63,0%</b></div>
+      </div>
+    </div>
+    <div class="card"><h3>🔄 Estratégias de atualização</h3>
+      <div class="bars">
+        <div class="bar"><span>Tutoriais / vídeos</span><div class="track"><div class="fill" style="width:96.3%"></div></div><b>96,3%</b></div>
+        <div class="bar"><span>Troca com colegas</span><div class="track"><div class="fill" style="width:96.3%"></div></div><b>96,3%</b></div>
+        <div class="bar"><span>Cursos on-line/pres.</span><div class="track"><div class="fill" style="width:85.2%"></div></div><b>85,2%</b></div>
+        <div class="bar"><span>Artigos / livros</span><div class="track"><div class="fill" style="width:63%"></div></div><b>63,0%</b></div>
+      </div>
+    </div>
+  </div>
+  <div class="callout"><b>Conhecer ≠ aplicar:</b> a familiaridade com ferramentas não garante incorporação pedagógica → a formação deve ensinar <b>como aplicar</b> em sala.</div>
+</section>
+
+<!-- ================= SLIDE 19 ================= -->
+<section class="slide" data-label="08 · Resultados Parciais">
+  <p class="kicker">08 · Resultados Parciais</p>
+  <h2>Produto: curso online · 6 módulos · 16h · simuladores gratuitos</h2>
+  <span class="time">⏱ 1min30</span>
+  <div class="mods">
+    <div class="card"><h3>🤖 MÓD. 1</h3><p>Fundamentos da Robótica</p></div>
+    <div class="card"><h3>🧠 MÓD. 2</h3><p>Pensamento Computacional Desplugado</p></div>
+    <div class="card"><h3>🧩 MÓD. 3</h3><p>Programação por Blocos</p></div>
+    <div class="card"><h3>⚙️ MÓD. 4</h3><p>Eletrônica Virtual</p></div>
+    <div class="card"><h3>📘 MÓD. 5</h3><p>Aplicação Pedagógica e BNCC</p></div>
+    <div class="card"><h3>🎯 MÓD. 6</h3><p>Projeto Final</p></div>
+  </div>
+  <div class="tools"><b>Tinkercad · Scratch · MakeCode</b><br>Videoaulas ≤ 10 min + PDFs + Fóruns + Quizzes</div>
+</section>
+
+<!-- ================= SLIDE 20 ================= -->
+<section class="slide" data-label="09 · Cronograma">
+  <p class="kicker">09 · Cronograma</p>
+  <h2>Cronograma e próximos passos</h2>
+  <span class="time">⏱ 1min</span>
+  <div class="tl">
+    <div><span class="when">2024–25.1</span> Revisão teórica e requisitos <span class="ok">✔ concluído</span></div>
+    <div><span class="when">2025</span> Diagnóstico (n=27) <span class="ok">✔ concluído</span></div>
+    <div><span class="when">25.2–26.1</span> Desenvolvimento do curso (ADDIE) <span class="now">● em andamento</span></div>
+    <div><span class="when">2026.2</span> Validação por especialistas <span class="plan">previsto</span></div>
+    <div><span class="when">2026.2</span> Implementação do curso <span class="plan">previsto</span></div>
+    <div><span class="when">26.2–27.1</span> Avaliação pós-curso <span class="plan">previsto</span></div>
+    <div><span class="when">2027</span> Dissertação e defesa <span class="plan">previsto</span></div>
+  </div>
+  <div class="callout"><b>Próximos passos:</b> finalizar materiais instrucionais · configurar e testar o AVA · validação por especialistas · implementação e avaliação com professores.</div>
+</section>
+
+<!-- ================= SLIDE 21 ================= -->
+<section class="slide" data-label="Contribuições esperadas">
+  <p class="kicker">Contribuições esperadas</p>
+  <h2>Impacto da pesquisa</h2>
+  <span class="time">⏱ 30s</span>
+  <div class="cards">
+    <div class="card"><h3>💪 Confiança e autonomia docente</h3></div>
+    <div class="card"><h3>🆓 Formação gratuita, acessível e escalável</h3></div>
+    <div class="card"><h3>🧾 Subsídio a políticas de formação (BNCC / Res. 02/2025)</h3></div>
+  </div>
+</section>
+
+<!-- ================= SLIDE 22 ================= -->
+<section class="slide" data-label="Referências">
+  <p class="kicker">Referências</p>
+  <h2>Referências citadas na apresentação</h2>
+  <span class="time">⏱ —</span>
+  <ul class="refs">
+    <li>BATTESTIN, V.; SANTOS, P. S. ADDIEM – um processo para criação de cursos MOOC. EaD em Foco, v. 12, n. 1, 2022.</li>
+    <li>BERBEL, N. A. N. As metodologias ativas e a promoção da autonomia de estudantes. Semina, v. 32, n. 1, 2011.</li>
+    <li>BRACKMANN, C. P. Desenvolvimento do pensamento computacional através de atividades desplugadas na educação básica. Tese (Doutorado) – UFRGS, 2017.</li>
+    <li>BRASIL. Base Nacional Comum Curricular. MEC, 2017. · BRASIL. Resolução CNE/CEB nº 02/2025. MEC, 2025.</li>
+    <li>BRUM, Y. et al. A robótica educacional na formação continuada de professores. CONEDU, 2024.</li>
+    <li>CHING, Y. et al. Elementary school student development of STEM attitudes. TechTrends, v. 63, n. 5, 2019.</li>
+    <li>CUSTODIO, S. V. F. Robótica Criativa e Sustentável. Dissertação – UNINOVE, 2023.</li>
+    <li>FILATRO, A. Design instrucional na prática. São Paulo: Pearson, 2008. · BRANCH, R. M. Instructional Design: The ADDIE Approach. Springer, 2009.</li>
+    <li>FREITAS NETO, J. J.; BERTAGNOLLI, S. C. Robótica educacional e formação de professores: revisão sistemática. RENOTE, v. 19, n. 1, 2021.</li>
+    <li>KOPCHA, T. J. et al. Developing an integrative STEM curriculum for robotics education. J. Formative Design in Learning, v. 1, 2017.</li>
+    <li>MORAES, C. B.; BRANDT, C. R. Dificuldades de professores do Ensino Fundamental na integração da robótica. RBIE, v. 31, 2023.</li>
+    <li>MORAN, J. Desafios da comunicação pessoal e virtual na educação. In: Novas tecnologias e mediação pedagógica. Papirus, 2015.</li>
+    <li>NASCIMENTO, K. R. Formação continuada de professores em robótica educacional: Tinkercad. Dissertação – UFC, 2024.</li>
+    <li>RESNICK, M. Jardim de infância para a vida toda. Porto Alegre: Penso, 2020.</li>
+    <li>SILVA, M. et al. Robótica educacional: formação de docente. Caderno Pedagógico, v. 21, n. 8, 2024.</li>
+  </ul>
+</section>
+
+<!-- ================= SLIDE 23 ================= -->
+<section class="slide" data-label="Obrigado">
+  <div class="final">
+    <svg class="grande" viewBox="0 0 500 500" style="width:120px;height:120px"><use href="#emblema"/></svg>
+    <h1>Obrigado!</h1>
+    <p>André Luís de Oliveira · oliveira.andre@gmail.com<br>Orientadora: Prof.ª Dr.ª Maria Amélia Eliseo</p>
+    <div class="callout" style="max-width:760px">“A consolidação da robótica educacional depende não apenas da disponibilidade de recursos tecnológicos, mas principalmente da existência de processos formativos capazes de preparar os professores.”</div>
+  </div>
+</section>
+
+<footer id="footer">
+  <button id="prev" title="Anterior">◀</button>
+  <button id="next" title="Próximo">▶</button>
+  <button id="fs" title="Tela cheia">⛶</button>
+  <span class="hint">← → navegar · F tela cheia</span>
+  <span id="lbl">Capa</span>
+  <span id="ctr">1 / 23</span>
+</footer>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const lbl=document.getElementById('lbl'), ctr=document.getElementById('ctr');
+  let cur=0;
+  function show(n){
+    cur=(n+slides.length)%slides.length;
+    slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+    lbl.textContent=slides[cur].dataset.label;
+    ctr.textContent=(cur+1)+' / '+slides.length;
+  }
+  function toggleFS(){ document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown') show(cur+1);
+    else if(e.key==='ArrowLeft'||e.key==='PageUp') show(cur-1);
+    else if(e.key==='f'||e.key==='F') toggleFS();
+  });
+  document.getElementById('prev').onclick=()=>show(cur-1);
+  document.getElementById('next').onclick=()=>show(cur+1);
+  document.getElementById('fs').onclick=toggleFS;
+  show(0);
+</script>
+</body>
+</html>
